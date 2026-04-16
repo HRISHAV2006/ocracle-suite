@@ -26,6 +26,7 @@ if (typeof window !== 'undefined') {
 
 // ── Typed API wrappers ────────────────────────────────────────────────
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 function mapScanResponse(resData: any): ScanResult {
   const { product, truthScore } = resData;
   return {
