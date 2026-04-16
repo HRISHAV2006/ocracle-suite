@@ -1,0 +1,24 @@
+{
+  "manifest_version": 3,
+  "name": "OCRacle Greenwashing Detector",
+  "version": "1.0.0",
+  "description": "Scan eCommerce pages for greenwashing.",
+  "permissions": [
+    "activeTab",
+    "scripting"
+  ],
+  "action": {
+    "default_popup": "popup.html",
+    "default_icon": "icon.png"
+  },
+  "content_scripts": [
+    {
+      "matches": ["*://*.amazon.com/*", "*://*.amazon.in/*", "*://*.nykaa.com/*", "*://*.bigbasket.com/*"],
+      "js": ["content.js"]
+    }
+  ],
+  "host_permissions": [
+    "http://localhost:3001/*",
+    "https://api.ocracle.com/*"
+  ]
+}
