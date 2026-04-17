@@ -1,5 +1,5 @@
 export function generateStaticParams() {
-  return [];
+  return [{ expertId: 'dummy' }];
 }
 export default function Dummy() {
   return null;

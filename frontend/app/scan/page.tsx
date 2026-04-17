@@ -2,7 +2,7 @@
 
 import React, { useState, useRef } from 'react';
 import Link from 'next/link';
-import { ScanLine, Type, Hash, ArrowRight, Loader2 } from 'lucide-react';
+import { ScanLine, Type, Hash, ArrowRight, Loader2, Camera, UploadCloud } from 'lucide-react';
 import { TruthScoreDial } from '@/components/score/TruthScoreDial';
 import { SubScoreBar } from '@/components/score/SubScoreBar';
 import { ScoreBadge } from '@/components/score/ScoreBadge';
@@ -88,65 +88,102 @@ export default function ScanPage() {
               style={{ display: 'block', fontSize: '0.8rem', color: 'var(--text-muted)', marginBottom: '0.5rem' }}
             >
               {scanMode === 'ocr'
-                ? 'Describe the product or paste ingredient label text:'
+                ? 'Upload product image or take a photo:'
                 : 'Paste or type the full ingredient list:'}
             </label>
-            <div style={{ display: 'flex', gap: '0.75rem' }}>
-              <input
-                ref={inputRef}
-                id="scan-input"
-                type="text"
-                value={query}
-                onChange={(e) => setQuery(e.target.value)}
-                placeholder={
-                  scanMode === 'ocr'
-                    ? 'e.g. Aqua, Sodium Laureth Sulfate, …'
-                    : 'Paste full ingredient list here…'
-                }
-                autoComplete="off"
+            
+            {scanMode === 'ocr' ? (
+              <div
                 style={{
-                  flex: 1,
-                  padding: '12px 16px',
-                  borderRadius: 'var(--border-radius-md)',
-                  border: '1px solid var(--surface-border)',
-                  background: 'var(--surface-bg)',
-                  color: 'var(--text-primary)',
-                  fontFamily: 'var(--font-body)',
-                  fontSize: '0.9rem',
-                  outline: 'none',
-                  transition: 'border-color var(--transition-fast)',
+                  border: '2px dashed var(--surface-border)',
+                  borderRadius: 'var(--border-radius-lg)',
+                  padding: '2.5rem 1rem',
+                  textAlign: 'center',
+                  background: 'rgba(255,255,255,0.02)',
+                  cursor: 'pointer',
+                  transition: 'all 0.2s ease',
+                  marginBottom: '1rem'
                 }}
-                onFocus={(e) => (e.currentTarget.style.borderColor = 'rgba(204,0,0,0.5)')}
-                onBlur={(e) =>  (e.currentTarget.style.borderColor = 'var(--surface-border)')}
-              />
-              <button
-                id="scan-submit-btn"
-                type="submit"
-                disabled={isPending || !query.trim()}
-                style={{
-                  padding: '12px 20px',
-                  borderRadius: 'var(--border-radius-md)',
-                  background: 'var(--color-truth-red)',
-                  color: 'white',
-                  fontFamily: 'var(--font-display)',
-                  fontWeight: 700,
-                  fontSize: '0.9rem',
-                  transition: 'filter var(--transition-fast)',
-                  flexShrink: 0,
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: 6,
-                  opacity: (!query.trim()) ? 0.5 : 1,
-                  cursor: (!query.trim()) ? 'not-allowed' : 'pointer',
+                className="hover:border-[var(--color-truth-red)] hover:bg-[rgba(204,0,0,0.03)] group"
+                onClick={() => {
+                   // Mock behavior: simulate taking a photo and auto-submitting
+                   setQuery('Mocked image text: Aqua, Sodium Laureth Sulfate, Parfum...');
+                   setTimeout(() => {
+                     document.getElementById('scan-submit-btn')?.click();
+                   }, 600);
                 }}
-                className="hover:brightness-110"
               >
-                {isPending
-                  ? <><Loader2 size={16} style={{ animation: 'spin 0.7s linear infinite' }} /> Scanning…</>
-                  : <>Get Score <ArrowRight size={16} /></>
-                }
-              </button>
-            </div>
+                <div style={{ display: 'flex', justifyContent: 'center', gap: '1rem', marginBottom: '1rem' }}>
+                  <div style={{ background: 'rgba(204,0,0,0.1)', width: 56, height: 56, borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center' }} className="group-hover:scale-110 transition-transform">
+                    <Camera size={24} color="var(--color-truth-red)" />
+                  </div>
+                  <div style={{ background: 'var(--surface-elevated)', width: 56, height: 56, borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', border: '1px solid var(--surface-border)' }} className="group-hover:scale-110 transition-transform">
+                    <UploadCloud size={24} color="var(--text-secondary)" />
+                  </div>
+                </div>
+                <p style={{ fontFamily: 'var(--font-display)', fontWeight: 600, color: 'var(--text-primary)', marginBottom: '0.25rem' }}>
+                  Tap to open Camera or Gallery
+                </p>
+                <p style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>
+                  Supported formats: JPG, PNG, HEIC
+                </p>
+              </div>
+            ) : (
+              <div style={{ display: 'flex', gap: '0.75rem', marginBottom: '1rem' }}>
+                <input
+                  ref={inputRef}
+                  id="scan-input"
+                  type="text"
+                  value={query}
+                  onChange={(e) => setQuery(e.target.value)}
+                  placeholder="e.g. Aqua, Sodium Laureth Sulfate..."
+                  autoComplete="off"
+                  style={{
+                    flex: 1,
+                    padding: '12px 16px',
+                    borderRadius: 'var(--border-radius-md)',
+                    border: '1px solid var(--surface-border)',
+                    background: 'var(--surface-bg)',
+                    color: 'var(--text-primary)',
+                    fontFamily: 'var(--font-body)',
+                    fontSize: '0.9rem',
+                    outline: 'none',
+                    transition: 'border-color var(--transition-fast)',
+                  }}
+                  onFocus={(e) => (e.currentTarget.style.borderColor = 'rgba(204,0,0,0.5)')}
+                  onBlur={(e) =>  (e.currentTarget.style.borderColor = 'var(--surface-border)')}
+                />
+              </div>
+            )}
+
+            <button
+              id="scan-submit-btn"
+              type="submit"
+              disabled={isPending || (!query.trim() && scanMode !== 'ocr')}
+              style={{
+                width: '100%',
+                padding: '14px 20px',
+                borderRadius: 'var(--border-radius-md)',
+                background: 'var(--color-truth-red)',
+                color: 'white',
+                fontFamily: 'var(--font-display)',
+                fontWeight: 700,
+                fontSize: '0.95rem',
+                transition: 'filter var(--transition-fast)',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                gap: 8,
+                opacity: (!query.trim() && scanMode !== 'ocr') ? 0.5 : 1,
+                cursor: (!query.trim() && scanMode !== 'ocr') ? 'not-allowed' : 'pointer',
+              }}
+              className="hover:brightness-110"
+            >
+              {isPending
+                ? <><Loader2 size={18} style={{ animation: 'spin 0.7s linear infinite' }} /> Analyzing...</>
+                : <>{scanMode === 'ocr' ? 'Process Image' : 'Get Score'} <ArrowRight size={18} /></>
+              }
+            </button>
           </div>
 
           <p

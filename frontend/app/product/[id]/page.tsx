@@ -1,5 +1,5 @@
 export function generateStaticParams() {
-  return [];
+  return [{ id: 'dummy' }];
 }
 export default function Dummy() {
   return null;
