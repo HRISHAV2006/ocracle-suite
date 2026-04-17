@@ -129,7 +129,7 @@ export default function HistoryPage() {
               {filteredHistory.map((item) => (
                 <Link
                   key={item.scanId}
-                  href={`/product/${item.productId}`}
+                  href={`/product?id=${item.productId}`}
                   className="card"
                   style={{
                     display: 'flex',

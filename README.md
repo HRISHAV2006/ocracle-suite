@@ -168,19 +168,20 @@ Truth Score = Carbon × 0.40 + Water × 0.35 + Toxicity × 0.25
 
 ## 🚢 Deployment
 
-### Frontend → Vercel
+### Frontend → Firebase Hosting
 
 ```bash
-cd frontend
+# Install Firebase CLI
+npm i -g firebase-tools
 
-# Install Vercel CLI
-npm i -g vercel
+# Login to Firebase
+firebase login
 
-# Deploy
-vercel --prod
+# Set your Firebase project (replace with your project ID)
+firebase use ocracle-your-project-id
 
-# Set environment variables in Vercel Dashboard:
-# NEXT_PUBLIC_API_URL, NEXT_PUBLIC_FIREBASE_*, NEXT_PUBLIC_STRIPE_KEY
+# Deploy to Firebase (uses Firebase Web Frameworks for Next.js)
+firebase deploy --only hosting
 ```
 
 ### Backend → Railway

@@ -21,7 +21,7 @@ export const useUIStore = create<UIState>()((set) => ({
   isScanning: false,
   isMobileMenuOpen: false,
   activeModal: null,
-  scanMode: 'barcode',
+  scanMode: 'ocr',
 
   setScanning: (isScanning) => set({ isScanning }),
   setIsScanning: (isScanning) => set({ isScanning }),

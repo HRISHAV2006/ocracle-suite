@@ -251,7 +251,7 @@ export default function DashboardPage() {
                     <p style={{ fontSize: '0.72rem', color: 'var(--text-muted)' }}>{s.brand}</p>
                   </div>
                   <Link
-                    href={`/product/demo`}
+                    href={`/product?id=demo`}
                     style={{ color: 'var(--text-muted)', flexShrink: 0 }}
                   >
                     <ArrowRight size={14} />

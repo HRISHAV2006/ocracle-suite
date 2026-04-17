@@ -52,7 +52,7 @@ async function scanProduct(barcode) {
   const dbProduct = await db('products').where({ barcode }).first();
   let productId;
   if (!dbProduct) {
-    const [insertedIds] = await db('products').insert({
+    const result = await db('products').insert({
       barcode,
       name: productInfo.name,
       brand: productInfo.brand,
@@ -63,8 +63,16 @@ async function scanProduct(barcode) {
       carbon_score: truthScore.carbon,
       water_score: truthScore.water,
       toxicity_score: truthScore.toxicity
-    }).returning('id');
-    productId = insertedIds ? insertedIds.id : null;
+    });
+
+    // Handle SQLite vs Postgres ID return formats
+    if (Array.isArray(result) && typeof result[0] === 'object') {
+      productId = result[0].id; // Postgres .returning('id')
+    } else if (Array.isArray(result)) {
+      productId = result[0]; // SQLite default
+    } else {
+      productId = result;
+    }
   } else {
     productId = dbProduct.id;
   }

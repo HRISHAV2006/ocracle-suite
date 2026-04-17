@@ -119,7 +119,7 @@ export function ProductCard({ product, showAlternativesBadge = false, onSave, cl
 
       {/* CTA */}
       <Link
-        href={`/product/${product.id}`}
+        href={`/product?id=${product.id}`}
         id={`view-product-${product.id}`}
         style={{
           display: 'flex',

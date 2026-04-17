@@ -3,12 +3,14 @@ import type { ScanResult } from '@/types/scan';
 import type { Product } from '@/types/product';
 import type { Expert } from '@/types/expert';
 
+// ── Axios client ──────────────────────────────────────────────────────
 export const apiClient = axios.create({
   baseURL: process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:3001',
   timeout: 15_000,
   headers: { 'Content-Type': 'application/json' },
 });
 
+// Attach Firebase ID token when available (browser only)
 if (typeof window !== 'undefined') {
   apiClient.interceptors.request.use(async (config) => {
     try {
@@ -21,6 +23,8 @@ if (typeof window !== 'undefined') {
     return config;
   });
 }
+
+// ── Typed API wrappers ────────────────────────────────────────────────
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 function mapScanResponse(resData: any): ScanResult {
@@ -45,26 +49,31 @@ function mapScanResponse(resData: any): ScanResult {
   };
 }
 
+/** Scan a product by EAN/UPC barcode */
 export async function scanByBarcode(barcode: string): Promise<ScanResult> {
   const { data } = await apiClient.post('/api/v1/scan/barcode', { barcode });
   return mapScanResponse(data.data);
 }
 
+/** Scan a product via OCR ingredient text */
 export async function scanByText(text: string): Promise<ScanResult> {
   const { data } = await apiClient.post('/api/v1/scan/text', { text });
   return mapScanResponse(data.data);
 }
 
+/** Lookup a single product by internal id */
 export async function getProduct(id: string): Promise<Product> {
   const { data } = await apiClient.get<Product>(`/api/v1/products/${id}`);
   return data;
 }
 
+/** Get eco-alternative products for a given product */
 export async function getAlternatives(productId: string): Promise<Product[]> {
   const { data } = await apiClient.get<Product[]>(`/api/v1/products/${productId}/alternatives`);
   return data;
 }
 
+/** List all verified experts (optionally filter by specialization) */
 export async function getExperts(specialization?: string): Promise<Expert[]> {
   const { data } = await apiClient.get<Expert[]>('/api/v1/experts', {
     params: specialization ? { specialization } : undefined,
@@ -72,6 +81,7 @@ export async function getExperts(specialization?: string): Promise<Expert[]> {
   return data;
 }
 
+/** Get a single expert by id */
 export async function getExpert(expertId: string): Promise<Expert> {
   const { data } = await apiClient.get<Expert>(`/api/v1/experts/${expertId}`);
   return data;

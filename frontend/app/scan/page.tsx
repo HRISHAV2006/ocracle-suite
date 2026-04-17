@@ -13,7 +13,6 @@ import type { ScanMode } from '@/types/scan';
 
 
 const MODES: { id: ScanMode; icon: typeof Hash; label: string; desc: string }[] = [
-  { id: 'barcode', icon: Hash,     label: 'Barcode',     desc: 'EAN-13 / QR' },
   { id: 'ocr',     icon: ScanLine,  label: 'Image OCR',   desc: 'Upload photo' },
   { id: 'manual',  icon: Type,      label: 'Manual Text', desc: 'Type ingredients' },
 ];
@@ -44,7 +43,7 @@ export default function ScanPage() {
         <div style={{ textAlign: 'center', marginBottom: '2.5rem' }} className="animate-fade-in-up">
           <h1 style={{ marginBottom: '0.75rem' }}>Scan a Product</h1>
           <p style={{ color: 'var(--text-secondary)', fontSize: '1rem' }}>
-            Enter a barcode, paste ingredients, or describe the product to get your instant Truth Score.
+            Upload a photo or paste ingredients to get your instant Truth Score.
           </p>
         </div>
 
@@ -53,7 +52,7 @@ export default function ScanPage() {
           <p style={{ fontSize: '0.8rem', color: 'var(--text-muted)', marginBottom: '1rem' }}>
             Choose scan method:
           </p>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '0.75rem' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '0.75rem' }}>
             {MODES.map(({ id, icon: Icon, label, desc }) => {
               const active = scanMode === id;
               return (
@@ -88,9 +87,7 @@ export default function ScanPage() {
               htmlFor="scan-input"
               style={{ display: 'block', fontSize: '0.8rem', color: 'var(--text-muted)', marginBottom: '0.5rem' }}
             >
-              {scanMode === 'barcode'
-                ? 'Enter barcode (EAN-13) or product name:'
-                : scanMode === 'ocr'
+              {scanMode === 'ocr'
                 ? 'Describe the product or paste ingredient label text:'
                 : 'Paste or type the full ingredient list:'}
             </label>
@@ -102,9 +99,7 @@ export default function ScanPage() {
                 value={query}
                 onChange={(e) => setQuery(e.target.value)}
                 placeholder={
-                  scanMode === 'barcode'
-                    ? 'e.g. 8901030890925 or GreenEarth Shampoo'
-                    : scanMode === 'ocr'
+                  scanMode === 'ocr'
                     ? 'e.g. Aqua, Sodium Laureth Sulfate, …'
                     : 'Paste full ingredient list here…'
                 }
@@ -249,7 +244,7 @@ export default function ScanPage() {
               {/* Actions */}
               <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap' }}>
                 <Link
-                  href={`/product/${result.productId}`}
+                  href={`/product?id=${result.productId}`}
                   id="result-view-product"
                   style={{
                     flex: 1,
